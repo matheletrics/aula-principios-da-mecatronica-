@@ -1,0 +1,55 @@
+const int rs=3;
+const int enable=2;
+const int d7=7;
+const int d6=6;
+const int d5=5;
+const int d4=4;
+const int trigger=8;
+const int echo =9;
+const int led= 10;
+float distancia ;
+const int alarme = 11;
+
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(rs, enable, d4, d5, d6, d7);
+
+void setup() {
+ pinMode(led, OUTPUT);
+  pinMode(alarme,OUTPUT);
+ lcd.begin(16, 2);
+ 
+  lcd.setCursor(0,0); 
+  lcd.print("perigo");
+  pinMode(echo, INPUT);
+  pinMode(trigger, OUTPUT);
+  digitalWrite(trigger, HIGH);
+  
+}
+void loop() 
+{ 
+  digitalWrite(trigger,LOW);
+ delayMicroseconds(5);
+  digitalWrite(trigger,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigger,LOW);
+  distancia= pulseIn(echo,HIGH);
+  distancia= distancia/58;
+  
+  if(distancia<200){ 
+    digitalWrite(led,HIGH);
+    delay(500);
+    digitalWrite(led,LOW);
+    delay(500);
+    lcd.clear();
+    lcd.setCursor(0,1);
+    lcd.print("invasor");
+    digitalWrite(alarme,HIGH);
+  } else { 
+    digitalWrite(led,LOW);
+    digitalWrite(alarme,LOW);
+    lcd.clear();
+    lcd.print("monitorando");
+  
+} 
+
+} 
